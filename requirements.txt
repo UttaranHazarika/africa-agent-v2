@@ -3,6 +3,7 @@ uvicorn
 boto3
 langchain
 langchain-aws
+langchain-community
 langgraph
 opensearch-py
 requests-aws4auth
