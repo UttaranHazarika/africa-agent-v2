@@ -1,0 +1,94 @@
+# =========================
+# Python (Backend)
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+.env/
+.venv/
+env/
+
+# Environment variables
+.env
+.env.*
+*.env
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# =========================
+# FastAPI / Runtime
+# =========================
+*.sqlite3
+*.db
+
+# =========================
+# Node / Next.js (Frontend)
+# =========================
+node_modules/
+.next/
+out/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# OS / Editor Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# VS Code / Codespaces
+.vscode/
+*.code-workspace
+
+# =========================
+# Git
+# =========================
+*.orig
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# AWS / Credentials
+# =========================
+.aws/
+*.pem
+*.key
+
+# =========================
+# Terraform / Infra (if added later)
+# =========================
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# =========================
+# Test / Coverage
+# =========================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# =========================
+# Misc
+# =========================
+*.swp
+*.swo
