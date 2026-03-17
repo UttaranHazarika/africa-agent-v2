@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+boto3
+langchain
+langchain-aws
+langgraph
+opensearch-py
+requests-aws4auth
+pydantic

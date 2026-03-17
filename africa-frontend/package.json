@@ -1,0 +1,13 @@
+{
+  "name": "africa-frontend",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export"
+  },
+  "dependencies": {
+    "next": "14",
+    "react": "18",
+    "react-dom": "18"
+  }
+}
