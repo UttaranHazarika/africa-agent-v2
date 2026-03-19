@@ -6,7 +6,13 @@ from app.agents.governance import governance_node
 from app.agents.memory import memory_node
 
 class AgentState(dict):
-    pass
+    query: str
+    context: str | None = None
+    decision: str | None = None
+    risk: str | None = None
+    policy: str | None = None
+    governance: str | None = None
+
 
 builder = StateGraph(AgentState)
 
@@ -42,8 +48,7 @@ Governance:
 
 builder.add_node("final", final_node)
 
-builder.add_edge("risk", "final")
-builder.add_edge("governance", "final")
+builder.add_edge(["risk", "governance"], "final")
 builder.add_edge("final", END)
 
 graph = builder.compile()

@@ -8,3 +8,4 @@ langgraph
 opensearch-py
 requests-aws4auth
 pydantic
+pytest

@@ -1,0 +1,31 @@
+{
+  "family": "africa-agent-task",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "africa-agent",
+      "image": "<IMAGE1_NAME>",
+      "portMappings": [
+        { "containerPort": 8000, "protocol": "tcp" }
+      ],
+      "essential": true,
+      "environment": [
+        { "name": "AWS_REGION", "value": "ap-south-1" },
+        { "name": "OPENSEARCH_ENDPOINT", "value": "<endpoint>" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/africa-agent",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024"
+}
