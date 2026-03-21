@@ -2,13 +2,21 @@ version: 0.2
 
 env:
   variables:
-    AWS_DEFAULT_REGION: ap-south-1
+    AWS_DEFAULT_REGION: us-east-1
     IMAGE_REPO_NAME: africa-agent
+    S3_BUCKET: africa-agent-frontend
 
 phases:
   install:
     commands:
+      - echo Installing backend dependencies
+      - pip install -r requirements.txt
       - pip install pytest
+
+      - echo Installing frontend dependencies
+      - cd africa-frontend
+      - npm install
+      - cd ..
 
   pre_build:
     commands:
@@ -16,20 +24,44 @@ phases:
       - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
       - REPO_URI=$ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - aws ecr get-login-password | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+
+      - echo Logging into ECR
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
   build:
     commands:
+      # Backend tests
+      - echo Running tests
       - pytest -q
+
+      # Build Docker image
+      - echo Building Docker image
       - docker build -t $REPO_URI:$IMAGE_TAG .
       - docker tag $REPO_URI:$IMAGE_TAG $REPO_URI:latest
 
+      # Build frontend
+      - echo Building frontend
+      - cd africa-frontend
+      - npm run build
+      - npm run export
+      - cd ..
+
   post_build:
     commands:
+      # Push backend image
+      - echo Pushing Docker images
       - docker push $REPO_URI:$IMAGE_TAG
       - docker push $REPO_URI:latest
+
+      # Create imagedefinitions.json for ECS deploy
       - printf '[{"name":"africa-agent","imageUri":"%s"}]' $REPO_URI:$IMAGE_TAG > imagedefinitions.json
+
+      # Deploy frontend to S3
+      - echo Deploying frontend to S3
+      - aws s3 sync africa-frontend/out s3://$S3_BUCKET --delete
 
 artifacts:
   files:
     - imagedefinitions.json
+    - appspec.yml
+    - taskdef.json
